@@ -1,0 +1,17 @@
+const { app } = require('./src/utils/app')
+const productsRouterFn = require('./src/routes/productsRouter')
+const productsRouter = productsRouterFn()
+const cartsRouterFn = require('./src/routes/cartsRouter')
+const cartsRouter = cartsRouterFn()
+const usersRouter = require('./src/routes/usersRouter')
+const sessionRouter = require('./src/routes/sessionRouter')
+const viewsRouter = require('./src/routes/viewsRouter')
+const mockingproductsRouter = require('./src/routes/mockingProductsRouter')
+
+
+app.use('/mock', mockingproductsRouter)
+app.use('/api/products', productsRouter)
+app.use('/api/users', usersRouter)
+app.use('/api/sessions', sessionRouter)
+app.use('/api/carts', cartsRouter)
+app.use('/', viewsRouter)

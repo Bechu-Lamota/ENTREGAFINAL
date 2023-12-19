@@ -1,0 +1,49 @@
+<h4>Agregar producto</h4>
+<form action="/api/products" method="POST">
+  <label for="name">Nombre: <input type="text" name="title"></label>
+  <label for="price">Precio: <input type="number" name="price"></label>
+  <label for="stock">Stock: <input type="number" name="stock"></label>
+  <input type="submit" value="Enviar">
+</form>
+
+<h4>Borrar producto</h4>
+<form action="/products/delete" method="POST">
+  <label for="id">Id:<input type="text" name="id"></label>
+  <input type="submit" value="Borrar">
+</form>
+
+<h4>Listado de productos</h4>
+<table id="products">
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Price</th>
+        <th>Stock</th>
+    </tr>
+    <tr>
+    <script>
+fetch('/api/products')
+    .then(response => response.json())
+    .then(data => {
+        const products = Array.isArray(data) ? data : [data];
+
+        const table = document.querySelector('#products');
+
+        products.forEach(product => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${product.id}</td>
+                <td>${product.title}</td>
+                <td>${product.price}</td>
+                <td>${product.stock}</td>
+            `;
+
+            table.appendChild(row);
+        });
+    })
+    .catch(error => console.error('Error fetching JSON:', error));
+    </script>
+    </tr>
+</table>
+
+<script src="/socket.io/socket.io.js"></script>
