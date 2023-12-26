@@ -1,4 +1,4 @@
-const EErrors = require("../../services/errors/enums")
+const EErrors = require('../../services/errors/enums')
 
 const ErrorMiddleware = (error, req, res, next) => {
   console.log(error.cause)

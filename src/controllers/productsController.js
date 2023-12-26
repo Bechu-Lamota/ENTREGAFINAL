@@ -45,7 +45,7 @@ class ProductsController {
       }
     }
     
-    async addProduct (req, res ) {
+    async addProduct (req, res) {
       try{
         const { id, tittle, description, price, code, thumbnail, status, stock, category } = req.body
 

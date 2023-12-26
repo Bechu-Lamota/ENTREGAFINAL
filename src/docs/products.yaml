@@ -1,0 +1,277 @@
+paths:
+  /api/products/:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - Products
+      parameters:
+        - name: limit
+          in: query
+          description: Límite de resultados por página.
+          required: false
+          schema:
+            type: integer
+        - name: page
+          in: query
+          description: Número de página a mostrar.
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Los productos fueron devueltos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        "404":
+          description: No existen productos en nuestra base de datos
+        "500":
+          description: Error interno del servidor
+
+    post:
+      summary: Agrega un producto al inventario
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: id del producto a agregar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/addProduct'
+      responses:
+        "201":
+          description: Producto agregado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "500":
+          description: Ocurrió un error con el servidor.
+
+  /api/products/{pid}:
+    get:
+      summary: Obtiene un producto según su id.
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: id del producto a buscar
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+    put:
+      summary: Actualiza un producto según su id.
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: id del producto a actualizar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/updateProduct'
+      responses:
+        "200":
+          description: Producto actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "404":
+          description: Producto no encontrado
+        "409":
+          description: Ya existe un producto con el código por el cual quieres actualizar el producto
+        "500":
+          description: Error interno del servidor
+
+    delete:
+      summary: Elimina un producto según su id.
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: id del producto a eliminar
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto eliminado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "404":
+          description: No se encontró el producto
+
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado de mongo.
+        title:
+          type: String
+          description: Nombre del producto.
+          required: true
+        description:
+          type: String
+          description: Descripción del producto.
+          required: true
+        code:
+          type: String
+          description: Código del producto.
+          unique: true
+        price:
+          type: Number
+          description: Precio del producto.
+          required: true
+        status:
+          type: Boolean
+          description: Disponibilidad del producto.
+        category:
+          type: String
+          description: Categoría del producto.
+        thumbnails:
+          type: array
+          description: Rutas de las imagenes del producto.
+        stock:
+          type: Number
+          description: Stock del producto.
+        owner:
+          type: String
+          description: Define quien creo un producto.
+          default: ADMIN
+      example:
+        _id: objectId("190b8c293f3a4b3be6dc405e")
+        title: Leche de almendras
+        description: Leche veggana de origen 100% natural de los arboles más altos del planeta.
+        code: NOT_VEGGAN01
+        price: 1500
+        status: true
+        stock: 2000
+        category: Almacen
+        thumbnails: ["jzavis/upload/milk.png"]
+        owner: ADMIN
+  requestBodies:
+    addProduct:
+      type: object
+      properties:
+        title:
+          type: String
+          description: Titulo del producto
+          required: true
+        description:
+          type: String
+          description: Descripcion del producto
+          required: true
+        code:
+          type: String
+          description: Código del producto
+          unique: true
+          required: true
+        price:
+          type: Number
+          description: Precio del producto
+          required: true
+        status:
+          type: boolean
+          description: Indica si el producto está disponible o no. Depende del stock
+          required: true
+        stock:
+          type: Number
+          description: Stock del producto
+          required: true
+        category:
+          type: String
+          description: Categoría del producto
+          required: true
+        thumbnails:
+          type: array
+          description: Contiene las rutas a las imágenes del producto en formato String
+        owner:
+          type: String
+          description: Contiene el pid de los usuarios con rol PREMIUM. En caso de no obtener un pid o ser creado por un ADMIN el owner será ADMIN
+          default: ADMIN
+      example:
+        title: Leche de almendras
+        description: Leche veggana de origen 100% natural de los arboles más altos del planeta.
+        code: NOT_VEGGAN
+        price: 1500
+        status: true
+        stock: 2000
+        category: Almacen
+        thumbnails: ["jzavis/upload/milk.png"]
+        owner: ADMIN
+    updateProduct:
+      type: object
+      properties:
+        title:
+          type: String
+          description: Titulo del producto
+          required: true
+        description:
+          type: String
+          description: Descripcion del producto
+          required: true
+        code:
+          type: String
+          description: Código del producto
+          unique: true
+          required: true
+        price:
+          type: Number
+          description: Precio del producto
+          required: true
+        status:
+          type: boolean
+          description: Indica si el producto está disponible o no. Depende del stock
+          required: true
+        stock:
+          type: Number
+          description: Stock del producto
+          required: true
+        category:
+          type: String
+          description: Categoría del producto
+          required: true
+        thumbnails:
+          type: array
+          description: Contiene las rutas a las imágenes del producto en formato String
+      example:
+        title: Leche MODIFICADA
+        description: Leche veggana de origen 100% natural de los arboles más altos del planeta.
+        code: NOT_VEGGAN
+        price: 1500
+        status: true
+        stock: 2000
+        category: Almacen
+        thumbnails: ["jzavis/upload/milk.png"]

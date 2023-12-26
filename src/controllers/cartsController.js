@@ -1,6 +1,5 @@
-const { purchaseMailReject } = require('../config/nodemailer')
 const CartsService = require('../service/cartsService')
-
+const { sendMail, purchaseMail, purchaseMailReject } = require('../config/nodemailer')
 
 class CartsController {
   constructor() {
@@ -18,9 +17,9 @@ class CartsController {
   }
 
   async getCartById(req, res) {
-    const { id } = req.params
+    const { cid } = req.params
     try {
-      const cart = await this.service.getCartById(id)
+      const cart = await this.service.getCartById(cid)
       if (!cart) {
         res.status(404).json({ error: 'Carrito no encontrado' })
       } else {
@@ -42,10 +41,10 @@ class CartsController {
   }
 
   async addProductCart(req, res) {
-    const { id, pid } = req.params
+    const { cid, pid } = req.params
 
     try {
-      await cartsService.addProductToCart(id, pid)
+      await this.service.addProductCart(cid, pid)
       res.json({ message: 'Product added to cart successfully' })
     } catch (error) {
       console.error(`Error adding product to cart: ${error.message}`)

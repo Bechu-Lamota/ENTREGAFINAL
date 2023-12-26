@@ -52,8 +52,32 @@ const purchaseMail = () => (user, result) ({
   attachments: []
 })
 
+const registerMail = () => (user) ({
+  from: `SWISH ${MAIL}`,
+  to: user.email,
+  subject: 'Bienvenido a la comunidad más grande',
+  html: `<div>
+          <h1>¿Querés equipar tu casa?</h1>
+          <p> Los mejores precios a tan solo un click, que esperas?</p>
+          <button><a href="http://localhost8080/products">¡VAMOS!</a></button>
+                </div>`,
+  attachments: []
+})
+
+const recoveryMail = () => (user) ({
+  from: `SWISH ${MAIL}`,
+  to: user.email,
+  subject: 'Recuperación de Contraseña',
+  html: `
+        <p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p>
+        <a href="http://localhost:8080/reset-password/${resetToken}">Restablecer contraseña</a>
+      `,
+})
+
 module.exports = {
   sendMail,
   purchaseMailReject,
-  purchaseMail
+  purchaseMail,
+  registerMail,
+  recoveryMail
 }

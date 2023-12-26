@@ -6,12 +6,13 @@ const session = require('express-session')
 const cookieParser = require('cookie-parser')
 const initializePassport = require('../config/passport/passport.config')
 const passport = require('passport')
-//const mongoose = require('mongoose')
-//commander & dotenv & singleton
 const DB = require('../config/command/singleton')
 const settings = require('../config/command/commander')
 DB.getConnection(settings)
 const addLogger = require('./logger')
+//Swagger
+const swaggerDocs = require('swagger-jsdoc')
+const swaggerUiExpress = require('swagger-ui-express')
 
 const app = express()
 
@@ -36,6 +37,23 @@ app.use(session({
 }))
 initializePassport()
 app.use(passport.initialize())
+
+//SWAGGER
+const swaggerOptions = {
+	definition: {
+		openapi: '3.0.1',
+		info: {
+			title: 'Documentación de SWISH',
+			description: 'API para gestión de ecommerce'
+		}
+	},
+	apis: [
+		`./src/docs/**/*.yaml`
+	]
+}
+
+const specs = swaggerDocs(swaggerOptions)
+app.use('/api/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 const PORT = 8080
 const httpServer = app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`))
@@ -92,6 +110,7 @@ app.get('/loggerTest', (req, res) => {
 
 	res.send({ message: 'Prueba de logger, Correcta!' })
 })
+
 
 module.exports = {
     app,

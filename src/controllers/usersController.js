@@ -12,9 +12,7 @@ class UsersController {
       return res.json(users)
     } catch (error) {
       console.error('Error al obtener los usuarios', error);
-      return res.status(500).json({
-          error: 'Error interno del servidor'
-      })
+      return res.status(500).json({ error: 'Error interno del servidor' })
     }
   }
  
@@ -24,19 +22,31 @@ class UsersController {
       const user = await this.service.getUserById(id)
   
       if (!user) {
-        return res.status(404).json({
-          error: 'Usuario no encontrado'
-        })
+        return res.status(404).json({ error: 'Usuario no encontrado' })
       }
   
       return res.json(user)
     } catch (error) {
       console.error('Error al obtener el usuario:', error);
-      res.status(500).json({ 
-        error: 'ID no encontrado' 
-      })
+      res.status(500).json({ error: 'ID no encontrado' })
     }
   }
+
+  async getUserByEmail(req, res) {
+    try {
+      const { email } = req.params
+      const user = await this.service.getUserByEmail(email)
+
+      if (!user) {
+        return res.status(404).json({ error: 'Usuario no encontrado' })
+      }
+
+      return res.json(user)
+    } catch (error) {
+      console.error('Error al obtener el usuario:', error);
+      res.status(500).json({ error: 'Email no encontrado' })
+    }
+  }  
 
   async addUser (req, res) {
     try{
@@ -44,17 +54,13 @@ class UsersController {
       const newUser = await this.service.addUser(body)
   
       if (!newUser) {
-        return res.status(500).json({
-          error: 'No se pudo crear el usuario'
-        })
+        return res.status(500).json({ error: 'No se pudo crear el usuario' })
       }
   
       return res.status(201).json(newUser)
     } catch (error) {
       console.error('Error al agregar el usuario:', error);
-      res.status(500).json({ 
-        error: 'No se pudo agregar el usuario' 
-      })
+      res.status(500).json({ error: 'No se pudo agregar el usuario' })
     }
   }
 
@@ -66,17 +72,13 @@ class UsersController {
       const updatedUser = await this.service.updatedUser(id, body)
   
       if (!updatedUser) {
-        return res.status(500).json({
-          error: 'No se pudo actualizar el usuario'
-        })
+        return res.status(500).json({ error: 'No se pudo actualizar el usuario' })
       }
   
       return res.json(updatedUser)
     } catch (error) {
       console.error('Error al actualizar el usuario:', error);
-      res.status(500).json({ 
-        error: 'No se pudo actualizar el usuario' 
-      })
+      res.status(500).json({ error: 'No se pudo actualizar el usuario' })
     }
   }
   
@@ -86,35 +88,29 @@ class UsersController {
       const deletedUser = await this.service.deletedUser(id)
   
       if (!deletedUser) {
-        return res.status(500).json({
-          error: 'No se pudo borrar el usuario'
-        })
+        return res.status(500).json({ error: 'No se pudo borrar el usuario' })
       }
       
       return res.status(204).json({})
     } catch (error) {
       console.error('Error al eliminar el usuario:', error);
-      res.status(500).json({ 
-        error: 'No se pudo eliminar el usuario' 
-      })
+      res.status(500).json({ error: 'No se pudo eliminar el usuario' })
     }
   }
 
-  async loginUser (req, res) {
+  async loginUser(req, res) {
     try {
       const { email, password } = req.body
+      if (!email || !password) return res.status(400).send({ status: "error", error: "Campo incompleto" });
       const userLogeedIn = this.service.loginUser(email, password)
-      
-      return res.json({
-        userLogeedIn
-      })
+
+      return res.json({ userLogeedIn })
     } catch (error) {
-      console.error('Error al logguearse:', error);
-      res.status(500).json({ 
-        error: 'No se pudo logguearse' 
-      })
+      console.error('Error al logguearse:', error)
+      res.status(500).json({ error: 'No se pudo logguearse' })
     }
   }
+
  }
 
 module.exports = UsersController

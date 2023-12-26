@@ -1,6 +1,6 @@
 //ESTRATEGIA OPTADA: JWT
 const passport = require('passport')
-const userModel = require('../../DAOs/models/userModel.js')
+const userModel = require('../../data/DAOs/models/userModel.js')
 const loginLocalStrategy = require('../strategies/loginLocalStrategy')
 const registerLocalStrategy = require('../strategies/registerLocalStrategy')
 const gitHubStrategy = require('../strategies/gitHubStrategy.js')
