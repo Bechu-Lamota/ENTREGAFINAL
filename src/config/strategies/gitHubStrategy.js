@@ -33,6 +33,7 @@ const gitHubStrategy = new GitHubStrategy({
       access_token: token
     })
   } catch (e) {
+    console.error('Error en GitHubStrategy:', e)
     return done(e)
   }
 })
