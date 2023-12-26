@@ -27,6 +27,28 @@ const userSchema = new mongoose.Schema({
 	cart: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'carts'
+	},
+	documents: {
+		type: [
+			{
+				name: {
+					type: String,
+					required: true
+				},
+				reference: {
+					type: String,
+					required: true
+				}
+			}
+		],
+		default: []
+	},
+	documentUploadStatus: {
+		type: Boolean,
+		default: false
+	},
+	last_connection: {
+		type: Date,
 	}
 })
 module.exports = mongoose.model('users', userSchema)
