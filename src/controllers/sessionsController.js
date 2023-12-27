@@ -24,6 +24,31 @@ class SessionsController {
 	}
 	//CORREGIR QUE ME TIRA UNDEFINED Y NO ME RECONOCE QUE ESTOY CONECTADO CON EL USUARIO
 
+	async register(req, res) {
+	try {
+		const { name, lastname, phone, role, age, email, password } = req.body
+		if (!email || !password) return res.status(400).send({ status: "error", error: "Incomplete values" })
+		const exists = await this.user.getUserByEmail(email)
+		if (exists) return res.status(400).send({ status: "error", error: "User already exists" })
+		
+		const hashedPassword = await createHash(password);
+		const user = {
+			name,
+			lastname,
+			age,
+			phone,
+			email,
+			role,
+			password: hashedPassword
+		}
+		let result = await this.user.create(user);
+		console.log(result);
+		res.send({ status: "success", payload: result._id })
+	} catch (error) {
+
+	}
+	}
+
 
 	async login(req, res) {
 		try {
