@@ -10,27 +10,6 @@ class SessionsController {
 		this.user = new UsersController()
 	}
 
-	async register(req, res) {
-		try {
-			const { body } = req
-			const newUser = await this.user.addUser(body)
-
-			// Si el registro fue correcto, autenticar al usuario usando la estrategia 'register'
-			passport.authenticate('register', { failureRedirect: '/register' })(req, res, () => {
-				// Autenticación exitosa, enviar correo y responder al cliente
-				const mailRegister = sendMail.registerMail(newUser.email);
-				sendMail(mailRegister)
-
-				return res.status(201).json({
-					message: '¡El usuario se registró correctamente! Se ha enviado un correo de bienvenida.',
-				})
-			})
-		} catch (error) {
-			console.error(error)
-			return res.status(500).json({ error: 'Error al registrarse', details: error.message })
-		}
-	}
-
 	async cookie(req, res) {
 		if (!req.session.counter) {
 			req.session.counter = 1
@@ -44,25 +23,6 @@ class SessionsController {
 		}
 	}
 	//CORREGIR QUE ME TIRA UNDEFINED Y NO ME RECONOCE QUE ESTOY CONECTADO CON EL USUARIO
-
-	//INGRESO CON GITHUB
-	async github(req, res, next) {
-		try {
-			passport.authenticate('github', { scope: ['user: email'] })(req, res, next)
-		} catch (error) {
-			console.error(error)
-			return res.status(500).json({ error: 'Error al autenticarse con GitHub', details: error.message })
-		}
-	}
-
-	async githubCallback(req, res, next) {
-		try {
-			passport.authenticate('github', { failureRedirect: '/login', failureFlash: true })(req, res, next)
-		} catch (error) {
-			console.error(error)
-			return res.status(500).json({ error: 'Error al procesar la autenticación de GitHub', details: error.message })
-		}
-	}
 
 	async login(req, res) {
 		try {

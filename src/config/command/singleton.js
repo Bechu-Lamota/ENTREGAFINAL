@@ -4,11 +4,17 @@ class MongoSingleton {
   static instance
 
   constructor (settings) {
+    /*
     const MONGODB_CONNECT = `mongodb+srv://${settings.db_user}:${settings.db_password}@${settings.db_host}/${settings.db_name}?retryWrites=true&w=majority`
+
 
     mongoose.connect(MONGODB_CONNECT)
       .then(async r => {
       })
+      */
+    
+    //con el RAILWAY.app
+    const MONGODB_CONNECT = mongoose.connect(process.env.MONGO_URL)
   }
 
   static getConnection(settings) {

@@ -1,0 +1,46 @@
+<a href="/profile"><img src="/img/usuario.png" alt="Imagen de perfil" class="navImg"></a>
+	<div>
+		<p>Welcome {{user.name}}</p>
+		{{#if user.email}} <p>Email: {{user.email}}</p> {{/if}}
+		<p>Role: {{user.role}}</p>
+	</div>
+	<a href="/logout"></a>
+
+	{{#if noUsers}}
+	<h1>No users in the database</h1>
+	{{else}}
+	<h1>MANAGE USERS</h1>
+	<article>
+		<table class="table">
+			<tr>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Role</th>
+			</tr>
+			{{#each users}}
+			<tr id="{{this.id}}">
+				<td>{{this.name}}</td>
+				<td>{{this.email}}</td>
+				<td><input type="text" name="role" value="{{this.role}}" contenteditable="true" />
+				</td>
+				<td>
+					<button onclick="updateUserRole('{{this.id}}')">Edit</button>
+				</td>
+				<td>
+					<button onclick="deleteUser('{{this.id}}')">Delete</button>
+				</td>
+				<td>
+					<input type="file" id="documents-{{this.id}}" name="documents" multiple>
+					<br>
+					<button onclick="uploadDocuments('{{this.id}}')">Upload
+						Documents</button>
+				</td>
+			</tr>
+			{{/each}}
+		</table>
+	</article>
+	<button onclick="deleteInactive()">Delete Inactive Users</button>
+	{{/if}}
+
+
+<script src="/js/users.js"></script>

@@ -7,7 +7,7 @@ const usersRouter = require('./src/routes/usersRouter')
 const sessionsRouterFn = require('./src/routes/sessionsRouter')
 const sessionsRouter = sessionsRouterFn()
 const viewsRouter = require('./src/routes/viewsRouter')
-const mockingproductsRouter = require('./src/routes/mockingProductsRouter')
+const mockingproductsRouter = require('./src/routes/mockingproductsRouter')
 
 
 app.use('/mock', mockingproductsRouter)

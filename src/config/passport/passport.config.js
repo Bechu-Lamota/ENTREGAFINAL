@@ -1,6 +1,5 @@
 //ESTRATEGIA OPTADA: JWT
 const passport = require('passport')
-const userModel = require('../../data/DAOs/models/userModel.js')
 const loginLocalStrategy = require('../strategies/loginLocalStrategy')
 const registerLocalStrategy = require('../strategies/registerLocalStrategy')
 const gitHubStrategy = require('../strategies/gitHubStrategy.js')
@@ -11,15 +10,6 @@ const initializePassport = () => {
     passport.use('register', registerLocalStrategy)
     passport.use('login', loginLocalStrategy)
     passport.use('github', gitHubStrategy)
-
-    passport.serializeUser((user, done) => {
-        return done(null, user.id)
-    })
-
-    passport.deserializeUser(async (id, done) => {
-        const user = await userModel.findById(id).populate('cart')
-        return done(null, user.id)
-    })
 }
 
 

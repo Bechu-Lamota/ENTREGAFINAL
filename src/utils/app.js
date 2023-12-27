@@ -55,8 +55,14 @@ const swaggerOptions = {
 const specs = swaggerDocs(swaggerOptions)
 app.use('/api/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
+/*
+//SIN RAILWAY
 const PORT = 8080
 const httpServer = app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`))
+*/
+//Con RAILWAY
+const PORT = process.env.PORT || 8080
+console.log(`Servidor corriendo en el puerto ${PORT}`)
 
 const io = new Server(httpServer)
 const users = []
