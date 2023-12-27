@@ -3,11 +3,11 @@ const { generateToken } = require('../utils/jwt')
 const { createHash } = require('../utils/passwordHash')
 const passportCall = require('../config/passport/passport.call')
 const { sendMail, recoveryMail } = require('../config/nodemailer')
-const UsersController = require('../controllers/usersController')
+const UsersService = require('../controllers/usersController')
 
 class SessionsController {
 	constructor() {
-		this.user = new UsersController()
+		this.user = new UsersService()
 	}
 
 	async cookie(req, res) {
@@ -23,6 +23,7 @@ class SessionsController {
 		}
 	}
 	//CORREGIR QUE ME TIRA UNDEFINED Y NO ME RECONOCE QUE ESTOY CONECTADO CON EL USUARIO
+
 
 	async login(req, res) {
 		try {
