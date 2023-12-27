@@ -1,8 +1,8 @@
-const usersRepository = require('../repository/usersRepository')
+const usersService = require('../service/usersService')
 
 class UsersController {
   constructor () {
-    this.service = new usersRepository()
+    this.service = new usersService()
   }
   
   async getUsers (req, res) {
@@ -69,7 +69,7 @@ class UsersController {
       const { id } = req.params
       const { body } = req
   
-      const updatedUser = await this.service.updatedUser(id, body)
+      const updatedUser = await this.service.updateUser(id, body)
   
       if (!updatedUser) {
         return res.status(500).json({ error: 'No se pudo actualizar el usuario' })
@@ -85,7 +85,7 @@ class UsersController {
   async deletedUser (req, res) {
     try{
       const { id } = req.params
-      const deletedUser = await this.service.deletedUser(id)
+      const deletedUser = await this.service.deleteUser(id)
   
       if (!deletedUser) {
         return res.status(500).json({ error: 'No se pudo borrar el usuario' })
@@ -108,6 +108,34 @@ class UsersController {
     } catch (error) {
       console.error('Error al logguearse:', error)
       res.status(500).json({ error: 'No se pudo logguearse' })
+    }
+  }
+
+  async updateRole(req, res) {
+    try {
+      const { uid } = req.params
+      const { newRole } = req.body
+
+      const result = await this.service.updateRole(uid, newRole)
+
+      if (!result.success) {
+        return res.status(400).json({ error: result.message });
+      }
+
+      return res.json(result.updatedUser);
+    } catch (error) {
+      console.error('Error al actualizar el rol del usuario:', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  }
+
+  async deleteInactive(req, res) {
+    try {
+      const usersDeleted = await this.service.deleteInactive()
+      res.sendSuccess(200, `${usersDeleted} usuarios eliminados`)
+    } catch (error) {
+      if (error.message === 'No hay usuarios en la base de datos') return res.sendError(409, 'No hay usuarios en la base de datos por eliminar')
+      return res.sendError(500, 'Error al eliminar usuarios inactivos');
     }
   }
 

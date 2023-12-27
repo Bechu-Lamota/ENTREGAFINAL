@@ -47,7 +47,19 @@ class usersRepository {
   loginUser(email, password) {
     return this.storage.loginUser(email, password)
   }
+
+  updateRole(uid, newRole) {
+    return this.storage.updateRole(uid, newRole)
+  }
+
+  async updateLastConnection(user) {
+    return this.storage.updateLastConnection(user)
+  }
   
+  async deleteInactive(usersToDelete) {
+    return this.storage.deleteInactive(usersToDelete)
+  }
+
 }
 
 module.exports = usersRepository

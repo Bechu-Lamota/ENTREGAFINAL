@@ -1,6 +1,7 @@
 const { Router } = require('express')
 const ProductsController = require('../controllers/productsController')
 const UserMiddleware = require('../middlewares/userMiddleware')
+const passportCall = require('../config/passport/passport.call')
 
 const viewsRouter = Router()
 const productController = new ProductsController()
@@ -53,6 +54,21 @@ viewsRouter.get('/login', (req, res) => {
   })
 })
 
+viewsRouter.get('/logout', passportCall('jwt'), async (req, res) => {
+  const user = req.user
+  try {
+    if (req.user.userId !== process.env.ADMIN_ID) {
+      await usersService.updateLastConnection(user);
+    }
+    res.clearCookie('authTokenCookie');
+    res.redirect('/')
+  } catch (error) {
+    res.renderView({
+      view: 'error', locals: { title: 'Error', errorMessage: error.message },
+    });
+  }
+});
+
 viewsRouter.get('/profile',  
 userMiddleware.isAuth.bind(userMiddleware), 
  (req, res, next) => {
@@ -77,6 +93,20 @@ viewsRouter.get('/recovery-password', (req, res) => {
 
 viewsRouter.get('/realTimeProducts', (req, res) => {
   return res.render('realtimeproducts')
+})
+
+viewsRouter.get('/users', passportCall('jwt'), userMiddleware.hasRole('ADMIN'), async (req, res) => {
+  const user = req.user
+  try {
+    const users = await usersService.getUsers()
+    let noUsers = false
+    if (!users) noUsers = true
+    res.renderView({ view: 'users', locals: { title: 'Users', users, noUsers, user } })
+  } catch (error) {
+    res.renderView({
+      view: 'error', locals: { title: 'Error', errorMessage: error.message },
+    });
+  }
 })
 
 

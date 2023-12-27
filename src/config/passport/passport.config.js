@@ -13,12 +13,12 @@ const initializePassport = () => {
     passport.use('github', gitHubStrategy)
 
     passport.serializeUser((user, done) => {
-        return done(null, user._id)
+        return done(null, user.id)
     })
 
     passport.deserializeUser(async (id, done) => {
         const user = await userModel.findById(id).populate('cart')
-        return done(null, user)
+        return done(null, user.id)
     })
 }
 

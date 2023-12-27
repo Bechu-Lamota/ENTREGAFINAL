@@ -12,4 +12,9 @@ usersRouter.put('/:id', usersController.updatedUser.bind(usersController))
 usersRouter.delete('/:id', usersController.deletedUser.bind(usersController))
 usersRouter.post('/login', usersController.loginUser.bind(usersController))
 
+usersRouter.put('/premium/:uid', usersController.updateRole.bind(usersController))
+
+usersRouter.delete('/', usersController.deleteInactive.bind(usersController))
+
+
 module.exports = usersRouter

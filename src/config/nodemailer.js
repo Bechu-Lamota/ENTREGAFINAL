@@ -74,10 +74,21 @@ const recoveryMail = () => (user) ({
       `,
 })
 
+const inactiveMail = () => (user)({
+  from: `SWISH ${MAIL}`,
+  to: user.email,
+  subject: 'Eliminacion por inactividad',
+  html: `
+        <h1>Lo sentimos, su cuenta ha sido eliminada</h1>
+        <p> Su cuenta ha permaneció prolongadamente inactiva, por lo que ha sido eliminada.</p>
+      `,
+})
+
 module.exports = {
   sendMail,
   purchaseMailReject,
   purchaseMail,
   registerMail,
-  recoveryMail
+  recoveryMail,
+  inactiveMail
 }
