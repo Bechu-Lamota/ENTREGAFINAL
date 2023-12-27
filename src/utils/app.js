@@ -62,7 +62,7 @@ const httpServer = app.listen(PORT, () => console.log(`Servidor corriendo en el 
 */
 //Con RAILWAY
 const PORT = process.env.PORT || 8080
-console.log(`Servidor corriendo en el puerto ${PORT}`)
+const httpServer = app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`))
 
 const io = new Server(httpServer)
 const users = []
